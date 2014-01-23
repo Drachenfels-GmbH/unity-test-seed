@@ -2,8 +2,16 @@
 #include <stdio.h>
 
 TEST_GROUP(<GROUP>);
-TEST_SETUP(<GROUP>) {}
-TEST_TEAR_DOWN(<GROUP>) {}
+
+TEST_SETUP(<GROUP>)
+{
+
+}
+
+TEST_TEAR_DOWN(<GROUP>)
+{
+
+}
 
 TEST(<GROUP>, TestCase1) {
 	TEST_ASSERT_TRUE(0);
