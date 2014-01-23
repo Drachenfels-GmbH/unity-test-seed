@@ -16,7 +16,7 @@ clean:
 
 # Downloads and extracts unity sources into ./unity
 bootstrap:
-	curl $UNITY_SRC > .unity.zip && \
+	curl $(UNITY_SRC) > .unity.zip && \
 	unzip .unity.zip Unity-master/src/* Unity-master/extras/fixture/src/* -d unity &&\
 	mv unity/Unity-master/src/* unity/Unity-master/extras/fixture/src/* unity && \
 	rm -rf unity/Unity-master .unity.zip
