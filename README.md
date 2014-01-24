@@ -41,7 +41,7 @@ make: *** [default] Error 2
 
 
 ### Notes
-* Set `OPEN_IN_EDITOR` to your favorite editor e.g **vim** to
+* Set `EDITOR` to your favorite editor e.g **vim** to
 open a test file/group automatically after `make new name=<name>`.
 
 * The template for `make new` is [bin/group.c.template](bin/group.c.template)

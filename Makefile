@@ -1,18 +1,20 @@
-TESTS=$(shell ls test_*.c | cut -d'.' -f1 | cut -d'_' -f2)
-OUT=.run_tests
-TEMPLATE=bin/group.c.template
-UNITY_SRC=https://codeload.github.com/ThrowTheSwitch/Unity/zip/master
-CFLAGS=-Wall -Wp -w -g -I./unity -I../src -DTEST
+TESTS=$(shell ls test_*.c | cut -d'.' -f1 | sed 's/^test_//')
+TEST_SRC=
 # Specify your preferred editor which should open a new test file/group.
 # Set to `true` to do nothing.
-OPEN_IN_EDITOR=true
+EDITOR=true
+
+TEST_GROUP_TEMPLATE=bin/group.c.template
+CFLAGS=-Wall -Wp -w -g -I./unity -I../src -DTEST
+UNITY_SRC=https://codeload.github.com/ThrowTheSwitch/Unity/zip/master
+TEST_RUNNER=.run_tests
 
 # Execute test runner after compilation
-default: assemble compile
-	./$(OUT)
+default: compile
+	./$(TEST_RUNNER)
 
 clean:
-	rm -f $(OUT) $(OUT).c
+	rm -f $(TEST_RUNNER) $(TEST_RUNNER).c
 
 # Downloads and extracts unity sources into ./unity
 bootstrap:
@@ -24,20 +26,17 @@ bootstrap:
 # Creates the test runner source file which calls
 # all TEST_GROUPs defined by $(TEST)
 assemble:
-	./bin/assemble_groups.sh $(TESTS) > $(OUT).c
+	./bin/assemble_groups.sh $(TESTS) > $(TEST_RUNNER).c
 
 # Compiles the test runner created by `assemble`
-compile:
+compile: assemble
 	gcc $(CFLAGS) \
-	unity/unity.c unity/unity_fixture.c -o $(OUT) \
-	$(foreach var,$(TESTS), test_$(var).c) $(OUT).c
+	unity/unity.c unity/unity_fixture.c $(TEST_SRC) -o $(TEST_RUNNER) \
+	$(foreach var,$(TESTS), test_$(var).c) $(TEST_RUNNER).c
 
-# Creates a new TEST_GROUP `test_<name>.c` from $(TEMPLATE)
+# Creates a new TEST_GROUP `test_<name>.c` from $(TEST_GROUP_TEMPLATE)
 # @param[name] : the TEST_GROUP name
 new:
 	test -n "$(name)" && ! test -f "test_$(name).c" && \
-	cat $(TEMPLATE) | sed "s/\<GROUP\>/$(name)/g" > test_$(name).c && \
-	$(OPEN_IN_EDITOR) test_$(name).c \
-
-
-
+	cat $(TEST_GROUP_TEMPLATE) | sed "s/\<GROUP\>/$(name)/g" > test_$(name).c && \
+	$(EDITOR) test_$(name).c \
