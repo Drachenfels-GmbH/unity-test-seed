@@ -9,6 +9,11 @@ CFLAGS=-Wall -Wp -w -g -I./unity -I../src -DTEST
 UNITY_SRC=https://codeload.github.com/ThrowTheSwitch/Unity/zip/master
 TEST_RUNNER=.run_tests
 
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Darwin)
+	CFLAGS += -dwarf-2
+endif
+
 # Execute test runner after compilation
 default: compile
 	./$(TEST_RUNNER)
