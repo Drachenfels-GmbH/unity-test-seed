@@ -1,17 +1,16 @@
 TESTS=$(shell ls test_*.c | cut -d'.' -f1 | sed 's/^test_//')
-TEST_SRC=
 # Specify your preferred editor which should open a new test file/group.
 # Set to `true` to do nothing.
-EDITOR=true
+EDITOR ?= true
 
 TEST_GROUP_TEMPLATE=bin/group.c.template
-CFLAGS=-Wall -Wp -w -g -I./unity -I../src -DTEST
+CFLAGS += -Wall -Wp -w -g -I./unity -I../src -DTEST
 UNITY_SRC=https://codeload.github.com/ThrowTheSwitch/Unity/zip/master
 TEST_RUNNER=.run_tests
 
 UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Darwin)
-	CFLAGS += -dwarf-2
+	CFLAGS += -gdwarf-2 -g -O0
 endif
 
 # Execute test runner after compilation
@@ -36,7 +35,7 @@ assemble:
 # Compiles the test runner created by `assemble`
 compile: assemble
 	gcc $(CFLAGS) \
-	unity/unity.c unity/unity_fixture.c $(TEST_SRC) -o $(TEST_RUNNER) \
+	unity/unity.c unity/unity_fixture.c $(SRC) -o $(TEST_RUNNER) \
 	$(foreach var,$(TESTS), test_$(var).c) $(TEST_RUNNER).c
 
 # Creates a new TEST_GROUP `test_<name>.c` from $(TEST_GROUP_TEMPLATE)
