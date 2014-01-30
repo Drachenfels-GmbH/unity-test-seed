@@ -50,10 +50,10 @@ the test compilation:
 * `EDITOR` : to set your default editor to open a test file/group automatically after `make new name=<name>`
 
 I usually create a file (`env.sh`) that exports all required variables
-and `source` that file before running the tests / after modification.
+and `source` that file when required.
 
 ```bash
-# only exported variables are available in Makefile
+# only exported variables are available in the Makefile
 export EDITOR=vim
 export CFLAGS="-DTRACE -Wno-long-long -I/usr/local/include -L/usr/local/lib  -lssl -lcrypto"
 export SRC="../src/verify.c"
