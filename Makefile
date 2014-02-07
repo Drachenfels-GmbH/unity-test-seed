@@ -1,4 +1,7 @@
-TESTS=$(shell ls test_*.c | cut -d'.' -f1 | sed 's/^test_//')
+# see http://www.gnu.org/software/make/manual/html_node/Include.html
+-include Make.conf
+
+TESTS=$(shell ls test_*.c 2>/dev/null | cut -d'.' -f1 | sed 's/^test_//')
 # Specify your preferred editor which should open a new test file/group.
 # Set to `true` to do nothing.
 EDITOR ?= true
@@ -7,6 +10,7 @@ TEST_GROUP_TEMPLATE=bin/group.c.template
 CFLAGS += -Wall -Wp -w -g -I./unity -I../src -DTEST
 UNITY_SRC=https://codeload.github.com/ThrowTheSwitch/Unity/zip/master
 TEST_RUNNER=.run_tests
+SRC_DIR ?= ../src
 
 UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Darwin)
@@ -35,8 +39,9 @@ assemble:
 # Compiles the test runner created by `assemble`
 compile: assemble
 	gcc $(CFLAGS) \
-	unity/unity.c unity/unity_fixture.c $(SRC) -o $(TEST_RUNNER) \
-	$(foreach var,$(TESTS), test_$(var).c) $(TEST_RUNNER).c
+	unity/unity.c unity/unity_fixture.c -o $(TEST_RUNNER) $(TEST_RUNNER).c \
+	$(foreach var,$(SRC), $(SRC_DIR)/$(var)) \
+	$(foreach var,$(TESTS), test_$(var).c) 
 
 # Creates a new TEST_GROUP `test_<name>.c` from $(TEST_GROUP_TEMPLATE)
 # @param[name] : the TEST_GROUP name
