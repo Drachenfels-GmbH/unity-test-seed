@@ -31,6 +31,11 @@ bootstrap:
 	mv unity/Unity-master/src/* unity/Unity-master/extras/fixture/src/* unity && \
 	rm -rf unity/Unity-master .unity.zip
 
+# Replace Makefile with latest version
+update:
+	cp Makefile .Makefile~$(shell date +%Y-%m-%d-%H.%M.%S) && \
+	curl https://raw2.github.com/Drachenfels-GmbH/unity-test-seed/master/Makefile > Makefile 
+
 # Creates the test runner source file which calls
 # all TEST_GROUPs defined by $(TEST)
 assemble:

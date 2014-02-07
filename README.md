@@ -39,6 +39,11 @@ FAIL
 make: *** [default] Error 2
 ```
 
+### Update
+
+To switch to the latest version of the Makefile run ```make update```.
+A backup of the current version is saved to ".Makefile~<DATE>".
+
 ### Customize
 
 Usually you do not have to modify the `Makefile` itself.
