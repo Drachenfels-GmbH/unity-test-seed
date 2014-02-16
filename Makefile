@@ -6,18 +6,17 @@
 EDITOR ?= true
 
 SRC_DIR ?= ../src
-TEST_GROUP_TEMPLATE=bin/group.c.template
+TEST_GROUP_TEMPLATE ?= bin/group.c.template
 CFLAGS += -Wall -Wp -w -g -I./unity -I$(SRC_DIR) -DTEST
-UNITY_URL=https://codeload.github.com/ThrowTheSwitch/Unity/zip/master
-UNITY_SRC = unity/unity.c unity/unity_fixture.c
-TEST_RUNNER=.run_tests
+UNITY_URL ?= https://codeload.github.com/ThrowTheSwitch/Unity/zip/master
+UNITY_SRC ?= unity/unity.c unity/unity_fixture.c
+TEST_RUNNER ?= .run_tests
 TESTS ?= $(patsubst test_%.c, %, $(shell ls test_*.c 2>/dev/null))
-TEST_SOURCE = $(patsubst %, test_%.c, $(TESTS))
 
+TEST_SOURCE = $(patsubst %, test_%.c, $(TESTS))
 SRC_OBJS=$(patsubst %.c,$(SRC_DIR)/%.o,$(SRC))
 TEST_OBJS=$(patsubst %,test_%.o,$(TESTS))
 UNITY_OBJS=$(patsubst %.c,%.o,$(UNITY_SRC))
-
 OBJS=$(UNITY_OBJS) $(SRC_OBJS) $(TEST_OBJS) $(TEST_RUNNER).o
 
 UNAME_S := $(shell uname -s)
