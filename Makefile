@@ -62,4 +62,4 @@ update:
 new:
 	test -n "$(name)" && ! test -f "test_$(name).c" && \
 	cat $(TEST_GROUP_TEMPLATE) | sed "s/\<GROUP\>/$(name)/g" > test_$(name).c && \
-	$(EDITOR) test_$(name).c &
+	$(EDITOR) test_$(name).c
